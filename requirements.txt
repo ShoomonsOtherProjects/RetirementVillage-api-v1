@@ -10,7 +10,6 @@ idna==3.4
 motor==2.5.1
 multidict==6.0.2
 numpy
-pandas
 pydantic==1.10.2
 pymongo==3.12.3
 python-dateutil==2.8.2
