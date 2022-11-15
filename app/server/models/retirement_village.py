@@ -97,8 +97,8 @@ class RetirementVillage(Document):
         }
 
 class UpdateRetirementVillage(BaseModel):
-    name: str = Optional[str]
-    developer: PropertyDeveloper
+    name: Optional[str]
+    developer: Optional[PropertyDeveloper]
     address: Optional[str]
     geo: Optional[GeoObject]
     latitude: Optional[float]
@@ -130,6 +130,7 @@ class UpdateRetirementVillage(BaseModel):
     wheelchair_access: Optional[bool]
     wifi_in_home: Optional[bool]
     wifi_in_communal_areas: Optional[bool]
+    dateAmended: Optional[datetime]
 
 
 

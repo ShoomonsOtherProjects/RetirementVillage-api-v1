@@ -4,6 +4,8 @@ from fastapi_pagination import Page, paginate, add_pagination
 from app.server.database import init_db
 from app.server.routes.retirement_village import router as Router
 
+# from fastapi.staticfiles import StaticFiles
+
 app = FastAPI()
 
 
@@ -36,3 +38,5 @@ async def read_root() -> dict:
     return {"message": "Welcome to your beanie powered app!"}
 
 add_pagination(app)
+
+# app.mount("/static", StaticFiles(directory="static"), name="static")

@@ -9,6 +9,7 @@ from fastapi_pagination import Page, paginate, add_pagination
 
 from app.server.models.retirement_village import RetirementVillage, UpdateRetirementVillage
 from app.server.models.geo import  GeoObject
+from geojson import Point
 
 from app.server.models.interface_models import (
 
@@ -26,6 +27,7 @@ router = APIRouter()
 
 @router.post("/", response_description="Retirement village added to the database")
 async def add_retirement_village(retirementvillage: RetirementVillage) -> dict:
+    retirementvillage.geo=Point(tuple([retirementvillage.longitude, retirementvillage.latitude]))
     await retirementvillage.create()
     return {"message": "Retirement Village added successfully"}
 
@@ -40,25 +42,17 @@ async def get_retirement_villages() -> List[RetirementVillage]:
     retirementvillages = await RetirementVillage.find_all().to_list()
     return retirementvillages
 
-
+# put route working now....required removal of headers from axios service in vue app
 @router.put("/{id}", response_description="Retirement Village record updated")
-async def update_retirement_village_data(id: PydanticObjectId, req: UpdateRetirementVillage) -> RetirementVillage:
-    req = {k: v for k, v in req.dict().items() if v is not None}
-    update_query = {"$set": {
-        field: value for field, value in req.items()
-    }}
+async def update_retirement_village_data(id: PydanticObjectId, req: RetirementVillage) -> RetirementVillage:
+    retirementvillage = await RetirementVillage.get(id)
+    retirementvillage=req
 
-    review = await RetirementVillage.get(id)
-    if not review:
-        raise HTTPException(
-            status_code=404,
-            detail="Retirement Village record not found!"
-        )
-
-    await retirementvillage.update(update_query)
+    await retirementvillage.save()
     return retirementvillage
 
 
+#delete route not working
 @router.delete("/retirement_villages/{id}", response_description="Retirement Village record deleted from the database")
 async def delete_retirement_village_data(id: PydanticObjectId) -> dict:
     record = await RetirementVillage.get(id)
