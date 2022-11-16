@@ -47,6 +47,7 @@ async def get_retirement_villages() -> List[RetirementVillage]:
 async def update_retirement_village_data(id: PydanticObjectId, req: RetirementVillage) -> RetirementVillage:
     retirementvillage = await RetirementVillage.get(id)
     retirementvillage=req
+    retirementvillage.geo = Point(tuple([retirementvillage.longitude, retirementvillage.latitude]))
 
     await retirementvillage.save()
     return retirementvillage
